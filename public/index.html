@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitespeed Identity Reconciliation Beckend Task</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    .author-info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e9ecef;
+      border-radius: 4px;
+      line-height: 1.6;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #666;
+    }
+    .footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    #pageType {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="pageType"></div>
+    <h1>Bitespeed Identity Reconciliation</h1>
+    <form id="identityForm">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter email (optional)">
+      
+      <label for="phoneNumber">Phone Number</label>
+      <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number (optional)">
+      
+      <button type="submit">Identify</button>
+    </form>
+    
+    <pre class="result" id="result" style="display:none;"></pre>
+    
+    <div class="author-info">
+      <strong>👨‍💻 Nayan Mandal</strong><br>
+      📧 Edu: <a href="mailto:bt22csd035@iiitn.ac.in">bt22csd035@iiitn.ac.in</a><br>
+      📧 Personal: <a href="mailto:nayan.iiitn@gmail.com">nayan.iiitn@gmail.com</a><br>
+      📄 <a href="https://drive.google.com/file/d/11hfkQ60bbrtHAqq_rghWokeH42cq4ouF/view" target="_blank">View Resume</a>
+    </div>
+  </div>
+  <div class="footer">
+    Made for <a href="https://bitespeed.in/" target="_blank">Bitespeed</a> | 
+    <a href="https://github.com/9keystrokes/Identity-Reconciliation" target="_blank">GitHub</a>
+  </div>
+  <script>
+
+    // Show which page is being viewed and add navigation link
+    const pageTypeDiv = document.getElementById('pageType');
+    if (window.location.pathname === '/identify') {
+      pageTypeDiv.innerHTML = 'This is Identify Endpoint | <a href="/">Go to Homepage</a>';
+    } else {
+      pageTypeDiv.innerHTML = 'This is Homepage | <a href="/identify">Go to Identify Endpoint</a>';
+    }
+
+    const form = document.getElementById('identityForm');
+    const resultDiv = document.getElementById('result');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const payload = {};
+      if (email) payload.email = email;
+      if (phoneNumber) payload.phoneNumber = phoneNumber;
+      resultDiv.style.display = 'none';
+      resultDiv.textContent = '';
+      try {
+        const response = await fetch('/identify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        resultDiv.style.display = 'block';
+        resultDiv.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        resultDiv.style.display = 'block';
+        resultDiv.textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
