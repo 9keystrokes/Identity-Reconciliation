@@ -49,7 +49,7 @@ You can use Postman to test the API:
 5. Again Enter the following JSON:
 ```json
 {
-  "email": "mcfly@hillvalley.edu",
+  "email": "lorraine@hillvalley.edu",
   "phoneNumber": "123456"
 }
 ```
